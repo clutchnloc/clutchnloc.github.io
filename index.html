@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The ClutchNLoc® Overdue Retie Formula Calculator</title>
+  <meta name="description" content="A loctician's system for fair, calculated overdue pricing. Calculate your baseline in seconds." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="The ClutchNLoc® Overdue Retie Formula" />
+  <meta property="og:description" content="A loctician's system for fair, calculated overdue pricing." />
+  <meta property="og:type" content="website" />
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="wrap">
+      <p class="masthead__brand">ClutchNLoc</p>
+      <div class="masthead__rule"></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="wrap">
+        <span class="hero__eyebrow">The official formula, by DeAnna</span>
+        <h1 class="hero__title">The Overdue Retie <em>Formula</em>.</h1>
+        <p class="hero__sub">A loctician's system for fair, calculated overdue pricing. Stop pulling numbers out of thin air.</p>
+      </div>
+    </section>
+
+    <!-- ============ EMAIL GATE ============ -->
+    <section class="wrap" id="gate-section">
+      <div class="card">
+        <div class="gate">
+          <span class="gate__eyebrow">Free tool</span>
+          <h2 class="gate__title">Access the ClutchNLoc® Overdue Retie Formula Calculator</h2>
+          <p class="gate__sub">Enter your email to unlock the calculator. Instant access, no spam, and I'll send you when the full guide drops.</p>
+
+          <form class="gate__form" id="gate-form" action="https://formspree.io/f/xgojbkzg" method="POST" novalidate>
+            <label class="visually-hidden" for="gate-email">Email address</label>
+            <input class="input" id="gate-email" name="email" type="email" placeholder="you@yourbusiness.com" required autocomplete="email" />
+
+            <!-- Formspree hidden fields -->
+            <input type="hidden" name="_subject" value="New calculator unlock from clutchnloc.github.io" />
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
+            <button class="btn btn--primary btn--full" type="submit">Access the ClutchNLoc® Overdue Retie Formula Calculator</button>
+          </form>
+
+          <p class="gate__buyer-note">
+            <strong>Already have the guide?</strong> Use the quick-access link inside your copy.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CALCULATOR (hidden until unlock) ============ -->
+    <section class="wrap" id="calc-section" hidden>
+      <div class="card">
+        <h2 class="section-title">Your calculator</h2>
+        <p class="section-sub">Enter your numbers. The formula does the rest.</p>
+
+        <form class="form" id="calc-form" novalidate>
+          <div class="field">
+            <label class="field__label" for="input-price">Current retie price</label>
+            <div class="input-wrap">
+              <span class="input-wrap__prefix">$</span>
+              <input class="input input--prefixed" id="input-price" type="number" step="1" min="1" inputmode="decimal" placeholder="185" required />
+            </div>
+            <p class="field__hint">Your fixed rate for a standard retie service.</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="input-interval">Standard interval</label>
+            <div class="input-wrap">
+              <input class="input input--suffixed" id="input-interval" type="number" step="1" min="1" inputmode="decimal" placeholder="7" required />
+              <span class="input-wrap__suffix">weeks</span>
+            </div>
+            <p class="field__hint">Your maintenance window. Industry standard is 4 to 6 weeks; ClutchNLoc® extended is 4 to 7.</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="input-weeks">Weeks since last retie</label>
+            <div class="input-wrap">
+              <input class="input input--suffixed" id="input-weeks" type="number" step="1" min="1" inputmode="decimal" placeholder="13" required />
+              <span class="input-wrap__suffix">weeks</span>
+            </div>
+            <p class="field__hint">Total weeks since the client's last retie. Not weeks past due.</p>
+          </div>
+
+          <p class="error" id="error-msg" hidden></p>
+
+          <button class="btn btn--accent btn--full" type="submit">Calculate the baseline</button>
+        </form>
+
+        <!-- Result -->
+        <div class="result" id="result" hidden aria-live="polite">
+          <p class="result__label">Your baseline</p>
+          <p class="result__value" id="result-value">$0.00</p>
+          <span class="result__caption">this is your floor</span>
+          <p class="result__breakdown" id="result-breakdown"></p>
+        </div>
+
+        <div style="margin-top: 1rem; text-align: center;">
+          <button class="btn btn--ghost" id="reset-btn" type="button">Clear and start over</button>
+        </div>
+
+        <!-- Formula explainer -->
+        <div class="explainer">
+          <p class="explainer__title">The formula</p>
+          <p class="explainer__formula">B = (W ÷ S) × P</p>
+          <p class="explainer__note">
+            The baseline is your calculated <strong>total</strong>, not an amount to add on top of your standard rate. It scales with your standard price, so raise your rate and the formula scales with you.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA BANNER — Buy the guide ============ -->
+    <section class="wrap wrap--wide">
+      <div class="cta-banner">
+        <span class="cta-banner__eyebrow">The full system</span>
+        <h2 class="cta-banner__title">The calculator is the tool. <br />The guide is the education.</h2>
+        <p class="cta-banner__body">The full ClutchNLoc® Overdue Retie Formula guide includes the math behind the calculator, worked examples across price points, pushback scripts, a quick reference card, and the overdue retie policy I send every client.</p>
+        <a class="btn btn--accent" href="https://stan.store/ClutchNLoc" target="_blank" rel="noopener">Get the guide on Stan Store</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <p class="foot__brand">ClutchNLoc®</p>
+      <p>By DeAnna · Hampton, VA</p>
+      <p><a href="https://stan.store/ClutchNLoc" target="_blank" rel="noopener">stan.store/ClutchNLoc</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Email gate: reveal calculator on submit.
+    (function () {
+      const gateForm = document.getElementById('gate-form');
+      const gateSection = document.getElementById('gate-section');
+      const calcSection = document.getElementById('calc-section');
+
+      if (!gateForm) return;
+
+      gateForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Submit to Formspree in the background. Reveal calculator regardless of network state
+        // so buyers aren't blocked on slow connections.
+        try {
+          fetch(gateForm.action, {
+            method: 'POST',
+            body: new FormData(gateForm),
+            headers: { Accept: 'application/json' }
+          });
+        } catch (err) {
+          // Fail silently — the unlock experience should not depend on the network.
+        }
+
+        // Persist unlock so returning visitors skip the gate.
+        try { localStorage.setItem('clutch_calc_unlocked', '1'); } catch (err) {}
+
+        gateSection.hidden = true;
+        calcSection.hidden = false;
+
+        // Scroll to calculator
+        calcSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      // If already unlocked, skip the gate.
+      try {
+        if (localStorage.getItem('clutch_calc_unlocked') === '1') {
+          gateSection.hidden = true;
+          calcSection.hidden = false;
+        }
+      } catch (err) {}
+    })();
+  </script>
+  <script src="calc.js"></script>
+</body>
+</html>

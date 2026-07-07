@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Overdue Retie Calculator · Buyer access · ClutchNLoc®</title>
+  <meta name="description" content="Your quick-access ClutchNLoc® Overdue Retie Formula Calculator." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Prevent this page from being indexed by search engines. -->
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="wrap">
+      <p class="masthead__brand">ClutchNLoc</p>
+      <div class="masthead__rule"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap">
+      <div style="text-align: center; padding: 1.5rem 0 0.5rem;">
+        <span class="buyer-badge">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+            <path d="M9.5 4.5H8V3a2 2 0 10-4 0v1.5H2.5a.5.5 0 00-.5.5v6a.5.5 0 00.5.5h7a.5.5 0 00.5-.5V5a.5.5 0 00-.5-.5zM5 3a1 1 0 112 0v1.5H5V3z"/>
+          </svg>
+          Buyer access
+        </span>
+      </div>
+    </section>
+
+    <section class="hero" style="padding-top: 0;">
+      <div class="wrap">
+        <span class="hero__eyebrow">Your quick tool</span>
+        <h1 class="hero__title">Overdue Retie <em>Calculator</em>.</h1>
+        <p class="hero__sub">Bookmark this page. Open it before every overdue consultation. The formula does the work.</p>
+      </div>
+    </section>
+
+    <!-- ============ CALCULATOR ============ -->
+    <section class="wrap">
+      <div class="card">
+        <form class="form" id="calc-form" novalidate>
+          <div class="field">
+            <label class="field__label" for="input-price">Current retie price</label>
+            <div class="input-wrap">
+              <span class="input-wrap__prefix">$</span>
+              <input class="input input--prefixed" id="input-price" type="number" step="1" min="1" inputmode="decimal" placeholder="185" required />
+            </div>
+            <p class="field__hint">Your fixed rate for a standard retie service.</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="input-interval">Standard interval</label>
+            <div class="input-wrap">
+              <input class="input input--suffixed" id="input-interval" type="number" step="1" min="1" inputmode="decimal" placeholder="7" required />
+              <span class="input-wrap__suffix">weeks</span>
+            </div>
+            <p class="field__hint">Your maintenance window. Industry standard is 4 to 6 weeks; ClutchNLoc® extended is 4 to 7.</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="input-weeks">Weeks since last retie</label>
+            <div class="input-wrap">
+              <input class="input input--suffixed" id="input-weeks" type="number" step="1" min="1" inputmode="decimal" placeholder="13" required />
+              <span class="input-wrap__suffix">weeks</span>
+            </div>
+            <p class="field__hint">Total weeks since the client's last retie. Not weeks past due.</p>
+          </div>
+
+          <p class="error" id="error-msg" hidden></p>
+
+          <button class="btn btn--accent btn--full" type="submit">Calculate the baseline</button>
+        </form>
+
+        <!-- Result -->
+        <div class="result" id="result" hidden aria-live="polite">
+          <p class="result__label">Your baseline</p>
+          <p class="result__value" id="result-value">$0.00</p>
+          <span class="result__caption">this is your floor</span>
+          <p class="result__breakdown" id="result-breakdown"></p>
+        </div>
+
+        <div style="margin-top: 1rem; text-align: center;">
+          <button class="btn btn--ghost" id="reset-btn" type="button">Clear and start over</button>
+        </div>
+
+        <!-- Formula explainer -->
+        <div class="explainer">
+          <p class="explainer__title">The formula</p>
+          <p class="explainer__formula">B = (W ÷ S) × P</p>
+          <p class="explainer__note">
+            The baseline is your calculated <strong>total</strong>, not an amount to add on top of your standard rate. It scales with your standard price, so raise your rate and the formula scales with you.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <p class="foot__brand">ClutchNLoc®</p>
+      <p>By DeAnna · Hampton, VA</p>
+      <p><a href="https://stan.store/ClutchNLoc" target="_blank" rel="noopener">stan.store/ClutchNLoc</a></p>
+    </div>
+  </footer>
+
+  <script src="calc.js"></script>
+</body>
+</html>
