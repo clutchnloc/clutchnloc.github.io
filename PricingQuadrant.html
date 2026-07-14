@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClutchNLoc | Service Pricing Quadrant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#6915b4;
+    --purple-deep:#471f74;
+    --purple-soft:#8962d0;
+    --gold:#c38540;
+    --green:#a7ca63;
+    --red:#881b1b;
+    --ink:#000000;
+    --bg:#ffffff;
+    --tint:#f6f1fc;
+    --tint-deep:#ede4f8;
+    --line:#d9c9ef;
+    --muted:#5d4a73;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Karla',sans-serif;font-size:16px;line-height:1.55}
+  .wrap{max-width:780px;margin:0 auto;padding:0 20px 60px}
+
+  header{background:var(--purple-deep);color:#fff;padding:44px 20px 40px;text-align:center}
+  .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,6vw,44px);line-height:1.1}
+  header p{max-width:540px;margin:14px auto 0;color:#e6dcf5;font-size:15px}
+
+  .step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 22px;margin-top:26px}
+  .step-label{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .step-num{font-family:'Fraunces',serif;font-weight:700;font-size:15px;color:var(--gold);white-space:nowrap}
+  .step h2{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--purple-deep)}
+  .step .hint{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .subhead{font-family:'Fraunces',serif;font-size:16px;color:var(--purple);font-weight:600;margin:20px 0 4px;padding-bottom:4px;border-bottom:1px solid var(--tint-deep)}
+
+  label.field-label{display:block;font-weight:700;font-size:14px;margin:16px 0 6px;color:var(--purple-deep)}
+  select,input[type=number],input[type=text]{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;font-family:'Karla',sans-serif;font-size:16px;background:#fff;color:var(--ink)}
+  select:focus,input:focus{outline:2px solid var(--purple-soft);outline-offset:1px;border-color:var(--purple-soft)}
+
+  .choice-grid{display:grid;grid-template-columns:1fr;gap:9px;margin-top:6px}
+  @media(min-width:520px){.choice-grid{grid-template-columns:1fr 1fr}}
+  .choice-grid.full{grid-template-columns:1fr}
+  .choice{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
+  .choice:hover{border-color:var(--purple-soft)}
+  .choice input{margin-top:3px;accent-color:var(--purple);flex-shrink:0}
+  .choice .t{font-weight:600;font-size:14.5px}
+  .choice .s{font-size:12.5px;color:var(--muted)}
+  .choice .warn-s{font-size:12.5px;color:var(--red);font-weight:600}
+  .choice.checked{border-color:var(--purple);background:var(--tint)}
+
+  .svc-detail{display:none;margin:8px 0 4px 30px}
+  .svc-detail.show{display:block}
+  .svc-detail .pre{font-size:12.5px;font-weight:700;color:var(--muted);margin:8px 0 4px}
+  .svc-detail input{max-width:170px}
+  .inline-radios{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0}
+  .inline-radios label{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;border:1.5px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;background:#fff}
+  .inline-radios input{accent-color:var(--purple)}
+  .field-row{display:flex;gap:10px;flex-wrap:wrap}
+  .field-row > div{flex:1;min-width:120px;max-width:170px}
+  .hourly-fields{display:none}
+  .hourly-fields.show{display:flex;gap:10px;flex-wrap:wrap}
+  .hourly-fields > div{flex:1;min-width:120px;max-width:170px}
+  .od-wrap{display:none;margin-top:6px}
+  .od-wrap.show{display:block}
+  .mini-check{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;margin-top:8px;cursor:pointer}
+  .mini-check input{accent-color:var(--purple)}
+
+  .floor-note{margin-top:16px;border-left:4px solid var(--gold);background:var(--tint);padding:12px 14px;border-radius:0 9px 9px 0;font-size:13.5px}
+  .floor-note strong{color:var(--purple-deep)}
+
+  .optional-tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-left:8px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  .count-rows{display:grid;gap:8px;margin-top:8px}
+  .count-row{display:none;align-items:center;justify-content:space-between;gap:12px;background:var(--tint);border-radius:9px;padding:9px 12px;font-size:13.5px;font-weight:600}
+  .count-row.show{display:flex}
+  .count-row input{max-width:90px;padding:8px 10px;font-size:15px}
+  .totals-line{margin-top:10px;font-size:14px;font-weight:700;color:var(--purple-deep);background:var(--tint-deep);border-radius:9px;padding:10px 12px}
+
+  .ov-fields{display:none;margin-top:8px}
+  .ov-fields.show{display:block}
+  .ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:519px){.ov-grid{grid-template-columns:1fr}}
+  .ov-grid .pre{font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:4px}
+
+  .go{display:block;width:100%;margin-top:28px;background:var(--purple);color:#fff;font-family:'Karla',sans-serif;font-weight:700;font-size:17px;letter-spacing:.03em;border:none;border-radius:12px;padding:16px;cursor:pointer;transition:background .15s}
+  .go:hover{background:var(--purple-deep)}
+  .err{display:none;margin-top:12px;color:var(--red);font-weight:700;font-size:14px;text-align:center}
+  .err.show{display:block}
+
+  #results{display:none;margin-top:34px}
+  #results.show{display:block}
+  .results-head{text-align:center;margin-bottom:18px}
+  .results-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:26px;color:var(--purple-deep)}
+  .results-head p{font-size:14px;color:var(--muted);margin-top:4px}
+
+  /* Screenshot summary card */
+  .summary{background:var(--purple-deep);color:#fff;border-radius:16px;padding:24px 22px;margin-bottom:20px}
+  .summary .s-brand{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:10px;margin-bottom:12px;gap:10px;flex-wrap:wrap}
+  .summary .s-brand b{font-family:'Fraunces',serif;font-size:17px;color:var(--gold);letter-spacing:.02em}
+  .summary .s-brand span{font-size:11.5px;color:#cbb8e6;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+  .summary .s-score{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:#fff}
+  .summary .s-score small{font-size:14px;font-family:'Karla',sans-serif;font-weight:600;color:#cbb8e6;margin-left:8px}
+  .summary .s-rows{margin-top:12px;display:grid;gap:6px}
+  .summary .s-row{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;background:rgba(255,255,255,.08);border-radius:8px;padding:8px 12px}
+  .summary .s-row b{font-weight:700}
+  .summary .s-row .z{color:var(--gold);font-weight:700;white-space:nowrap}
+  .summary .s-foot{margin-top:12px;font-size:11.5px;color:#cbb8e6;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
+
+  .banner{display:none;border-radius:12px;padding:14px 16px;margin-bottom:14px;font-size:14px}
+  .banner.show{display:block}
+  .banner.compliance{background:#f9ecec;border:1.5px solid var(--red)}
+  .banner.compliance strong{color:var(--red)}
+  .banner.demand{background:#f3f8e8;border:1.5px solid var(--green)}
+  .banner.demand strong{color:#5d7a2a}
+  .banner.floorwarn{background:#f9ecec;border:1.5px solid var(--red)}
+  .banner.floorwarn strong{color:var(--red)}
+
+  .chart-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 14px 8px}
+  .chart-card svg{width:100%;height:auto;display:block}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:12px 6px 14px;font-size:13px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+  .legend i{width:11px;height:11px;border-radius:50%;display:inline-block;flex-shrink:0}
+
+  .verdicts{margin-top:18px;display:grid;gap:12px}
+  .verdict{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;border-left:5px solid var(--gold)}
+  .verdict h3{font-family:'Fraunces',serif;font-size:18px;color:var(--purple-deep);font-weight:600}
+  .verdict .zone{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin:7px 0 8px}
+  .zone.under{background:#eef5dc;color:#5d7a2a}
+  .zone.aligned{background:#f4e9db;color:#8a5a20}
+  .zone.building{background:var(--tint);color:var(--purple)}
+  .zone.ahead{background:#f9ecec;color:var(--red)}
+  .verdict p{font-size:14px}
+  .verdict .range{margin-top:9px;font-size:15px;font-weight:700;color:var(--purple-deep);background:var(--tint);border-radius:8px;padding:9px 12px}
+  .verdict .perinch{margin-top:7px;font-size:13px;color:var(--purple);font-weight:600}
+  .verdict .flag{margin-top:7px;font-size:13px;color:var(--red);font-weight:600}
+  .verdict a{color:var(--purple);font-weight:700}
+
+  .action-card{margin-top:18px;background:#fff;border:1.5px solid var(--gold);border-radius:14px;padding:20px}
+  .action-card h3{font-family:'Fraunces',serif;font-size:19px;color:var(--purple-deep);font-weight:600;margin-bottom:8px}
+  .action-card ol{margin:8px 0 0 20px;font-size:14px}
+  .action-card li{margin-bottom:7px}
+  .action-card p{font-size:14px}
+  .action-card a{color:var(--purple);font-weight:700}
+
+  .biz-card{margin-top:18px;background:var(--purple-deep);color:#fff;border-radius:14px;padding:22px 20px;display:none}
+  .biz-card h3{font-family:'Fraunces',serif;font-size:20px;color:var(--gold);font-weight:600}
+  .biz-card p{font-size:14px;margin-top:8px;color:#e6dcf5}
+  .biz-rows{margin-top:12px;display:grid;gap:6px}
+  .biz-row{display:flex;justify-content:space-between;gap:10px;font-size:14px;background:rgba(255,255,255,.08);border-radius:8px;padding:9px 12px}
+  .biz-row b{color:#fff}
+  .biz-row.total{background:rgba(195,133,64,.25)}
+  .biz-row.total b{color:var(--gold)}
+  .biz-card a{color:var(--gold);font-weight:700}
+
+  .assume{margin-top:18px;background:var(--tint);border-radius:12px;padding:16px 18px;font-size:13.5px}
+  .assume h4{font-family:'Fraunces',serif;color:var(--purple-deep);font-size:15px;margin-bottom:6px}
+  .assume ul{margin-left:18px}
+  .assume li{margin-bottom:3px}
+
+  .baseline-note{margin-top:16px;text-align:center;font-size:12.5px;color:var(--muted)}
+  .disclaimer{margin-top:10px;text-align:center;font-size:11.5px;color:var(--muted);max-width:560px;margin-left:auto;margin-right:auto}
+
+  footer{margin-top:52px;background:#000;color:#cbb8e6;text-align:center;font-size:12.5px;padding:18px 20px}
+  footer b{color:var(--gold)}
+  @media print{
+    header,.step,footer,.dl-btn{display:none !important}
+    #results{display:block !important}
+    body{background:#fff}
+    .summary,.biz-card{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .verdict,.action-card,.chart-card,.assume{break-inside:avoid}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .dot-in{animation:pop .5s ease-out both}
+    @keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">ClutchNLoc Official Tool</div>
+  <h1>Service Pricing Quadrant</h1>
+  <p>Answer honestly about what you deliver and what you charge. The quadrant shows where every service on your menu sits in your market, and the range you should be charging. <b style="color:#fff">Enter your CURRENT prices and numbers, not your goal numbers.</b> The quadrant only works on the truth.</p>
+</header>
+
+<div class="wrap">
+
+  <!-- STEP 1: MARKET -->
+  <section class="step">
+    <div class="step-label"><span class="step-num">Step 1</span><h2>You and your market</h2></div>
+    <p class="hint">Your prices only make sense inside the market you actually work in.</p>
+
+    <label class="field-label" for="userName">Your name</label>
+    <input type="text" id="userName" placeholder="Your name goes on your report" maxlength="40" autocomplete="name">
+
+    <div class="two-col" style="margin-top:4px">
+      <div>
+        <label class="field-label" for="state">State</label>
+        <select id="state"></select>
+      </div>
+      <div>
+        <label class="field-label" for="area">Area type</label>
+        <select id="area">
+          <option value="">Select</option>
+          <option value="1.15">Major city / urban</option>
+          <option value="1">Suburban</option>
+          <option value="0.87">Small town / rural</option>
+        </select>
+      </div>
+    </div>
+
+    <label class="field-label" for="city">City where you take clients</label>
+    <input type="text" id="city" placeholder="Example: Hampton" maxlength="60" autocomplete="address-level2">
+
+    <label class="field-label">Licensing status</label>
+    <div class="choice-grid" id="licenseGroup">
+      <label class="choice"><input type="radio" name="license" value="compliant"><span><span class="t">Fully compliant</span><br><span class="s">Licensed, or my state does not require one for the services I offer</span></span></label>
+      <label class="choice"><input type="radio" name="license" value="working"><span><span class="t">Working on it</span><br><span class="s">My state requires a license and I am not fully compliant yet</span></span></label>
+      <label class="choice"><input type="radio" name="license" value="unsure"><span><span class="t">Not sure</span><br><span class="s">I have not confirmed my state's requirements</span></span></label>
+    </div>
+    <div class="floor-note"><strong>The floor, not the flex.</strong> Legal compliance is the baseline cost of operating a business. It never justifies premium pricing on its own, and skipping it is not a discount strategy.</div>
+  </section>
+
+  <!-- STEP 2: SERVICES -->
+  <section class="step">
+    <div class="step-label"><span class="step-num">Step 2</span><h2>Your services and current prices</h2></div>
+    <p class="hint">Check every service you offer, then enter what you charge today. <b>Current prices only, not goal prices.</b> Use your standard rate, not your repair rate. Install prices are your starting price. If you charge hourly for a service, switch that service to hourly and the tool converts it for you. Time fields are optional but help the tool show what you truly earn per hour.</p>
+    <div id="svcGroup"></div>
+  </section>
+
+  <!-- STEP 3: EXPERIENCE DELIVERED -->
+  <section class="step">
+    <div class="step-label"><span class="step-num">Step 3</span><h2>Your experience delivered</h2></div>
+    <p class="hint">This is the honesty part. Score what the client actually receives, not what you plan to offer someday.</p>
+
+    <label class="field-label" for="years">Time in the industry</label>
+    <select id="years">
+      <option value="6">0 to 2 years</option>
+      <option value="11">3 to 5 years</option>
+      <option value="16">6 to 9 years</option>
+      <option value="21">10 or more years</option>
+    </select>
+
+    <label class="field-label">Training foundation <span class="optional-tag" style="color:var(--muted)">Check all that apply</span></label>
+    <p class="hint" style="margin-bottom:8px">Licensing was Step 1. This is different: this is the training behind your hands.</p>
+    <div class="choice-grid">
+      <label class="choice"><input type="checkbox" class="xp train" value="3"><span><span class="t">Self taught</span><br><span class="s">Built your skill through practice and independent study</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp train" value="9"><span><span class="t">Formal certification class</span><br><span class="s">Sisterlocks, microlocks, or equivalent structured training</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp train" value="4"><span><span class="t">Cosmetology school</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp train" value="4"><span><span class="t">Natural hair school / program</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp train" value="3"><span><span class="t">Barber school</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp train" value="3"><span><span class="t">Ongoing education</span><br><span class="s">Classes, guides, or mentorship in the last 2 years</span></span></label>
+    </div>
+
+    <label class="field-label">Where you serve clients</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="radio" name="loc" value="7"><span><span class="t">Home based: full service studio</span><br><span class="s">Detached studio on your home property, fully equipped</span></span></label>
+      <label class="choice"><input type="radio" name="loc" value="5"><span><span class="t">Home based: separate room / space</span><br><span class="s">A room or space in the home set aside for clients</span></span></label>
+      <label class="choice"><input type="radio" name="loc" value="3"><span><span class="t">Home based: just starting out</span><br><span class="s">Working with the space you have. Nothing wrong with that</span></span></label>
+      <label class="choice"><input type="radio" name="loc" value="6" class="mobileOpt"><span><span class="t">Travel / mobile loctician</span><br><span class="s">You bring the service to the client</span></span></label>
+      <label class="choice"><input type="radio" name="loc" value="7" class="mobileOpt"><span><span class="t">Travel / mobile with a home base</span><br><span class="s">You travel to clients and also serve them from your own space</span></span></label>
+      <label class="choice"><input type="radio" name="loc" value="7"><span><span class="t">Suite</span><br><span class="s">Private suite or studio space you rent</span></span></label>
+      <label class="choice"><input type="radio" name="loc" value="6"><span><span class="t">I work in a salon</span></span></label>
+      <label class="choice"><input type="radio" name="loc" value="8"><span><span class="t">I own the salon / salon suites</span></span></label>
+    </div>
+
+    <label class="field-label">Shampoo</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="radio" name="shampoo" value="6"><span><span class="t">Provided and included</span><br><span class="s">Shampoo is part of the service</span></span></label>
+      <label class="choice"><input type="radio" name="shampoo" value="2"><span><span class="t">Not included</span><br><span class="s">Clients arrive shampooed, or shampoo is a separate charge</span></span></label>
+      <label class="choice"><input type="radio" name="shampoo" value="0"><span><span class="t">Unable to include</span><br><span class="s">No shampoo setup, or state restrictions prevent it</span></span></label>
+    </div>
+    <div class="floor-note"><strong>Shampoo moves the price.</strong> If the client receives less, the price must reflect that. A service without shampoo is not the same service, and the ranges treat it that way.</div>
+
+    <label class="field-label">Included in the service itself</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="checkbox" class="xp" value="6"><span><span class="t">In-depth consultation before every service</span><br><span class="s">For providers who do not require a separate consult before booking: hair evaluation and documented notes built into the appointment</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="4"><span><span class="t">Written aftercare instructions</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="4"><span><span class="t">Basic styling included</span><br><span class="s">Not required, but if you include it, that is an added perk</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="3"><span><span class="t">New loc kit with starter locs / installs</span><br><span class="s">Aftercare products or tools sent home with new installs</span></span></label>
+    </div>
+
+    <label class="field-label">New client perks and packages</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="checkbox" class="xp" value="2.5"><span><span class="t">New client kit for transfer clients</span><br><span class="s">Onboarding kit for clients who already have locs</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="3"><span><span class="t">New client fresh slate package</span><br><span class="s">One price covers a detox, loc maintenance, and optional style, positioned as a fresh start with you</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="3"><span><span class="t">New install package: free first retie</span><br><span class="s">Follow-up retie at 4 to 7 weeks included with the install</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="2"><span><span class="t">New install package: 50% off first retwist</span></span></label>
+    </div>
+
+    <label class="field-label">Amenities and perks</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="checkbox" class="xp" value="2.5"><span><span class="t">Refreshments</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="2.5"><span><span class="t">Wifi or entertainment</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="2.5"><span><span class="t">Clean, dedicated service space</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="2.5"><span><span class="t">Flexible payment options</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="2.5"><span><span class="t">Loyalty or referral perks</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="2.5"><span><span class="t">Premium loc products used in services</span></span></label>
+    </div>
+  </section>
+
+  <!-- STEP 4: BUSINESS FOUNDATION -->
+  <section class="step">
+    <div class="step-label"><span class="step-num">Step 4</span><h2>Your business foundation</h2></div>
+    <p class="hint">Clients pay for confidence. These basics tell the market you run a business, not a hobby.</p>
+
+    <label class="field-label">Business basics</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="checkbox" class="xp" value="1.5"><span><span class="t">Registered business name</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1.5"><span><span class="t">Consistent branding</span><br><span class="s">Logo, colors, look that clients recognize</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1.5"><span><span class="t">Professional headshot</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1.5"><span><span class="t">Booking site or booking system</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1.5"><span><span class="t">Deposits collected at booking</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1.5"><span><span class="t">Written policies</span><br><span class="s">Overdue, no-show, and reschedule policies sent with booking</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1.5"><span><span class="t">I retail products to clients</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1.5"><span><span class="t">I purchase products wholesale</span><br><span class="s">Protects your margin on retail and in-service product use</span></span></label>
+    </div>
+
+    <label class="field-label">Official business establishment</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="checkbox" class="xp" value="1"><span><span class="t">LLC or registered business entity</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1"><span><span class="t">EIN</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1"><span><span class="t">Business bank account</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1"><span><span class="t">Health insurance</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="1"><span><span class="t">Retirement account (401k / IRA)</span></span></label>
+    </div>
+
+    <label class="field-label">Social proof</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="checkbox" class="xp" value="3"><span><span class="t">Portfolio of before and afters</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="3"><span><span class="t">Client reviews or testimonials</span></span></label>
+      <label class="choice"><input type="checkbox" class="xp" value="3"><span><span class="t">Consistent content presence</span></span></label>
+    </div>
+
+    <label class="field-label">Your work profile</label>
+    <div class="choice-grid">
+      <label class="choice"><input type="radio" name="workp" value="Full-time loctician (fully self-employed)"><span><span class="t">Full-time loctician</span><br><span class="s">Fully self-employed behind the chair</span></span></label>
+      <label class="choice"><input type="radio" name="workp" value="Loctician + full-time job"><span><span class="t">Loctician + full-time job</span></span></label>
+      <label class="choice"><input type="radio" name="workp" value="Loctician + part-time job"><span><span class="t">Loctician + part-time job</span></span></label>
+      <label class="choice"><input type="radio" name="workp" value="Part-time loctician"><span><span class="t">Part-time loctician</span><br><span class="s">The chair is the side business, for now</span></span></label>
+    </div>
+    <div class="two-col" style="margin-top:10px">
+      <div class="svc-detail show" style="margin:0"><div class="pre" style="margin-top:0">Average days behind the chair per week</div>
+        <input type="number" min="0" max="7" step="0.5" id="workDays" inputmode="decimal" placeholder="0" style="max-width:none"></div>
+      <div class="svc-detail show" style="margin:0"><div class="pre" style="margin-top:0">Typical hours per day</div>
+        <input type="number" min="0" max="24" step="0.5" id="workHours" inputmode="decimal" placeholder="0" style="max-width:none"></div>
+    </div>
+
+    <label class="field-label" for="demand">How booked are you right now?</label>
+    <select id="demand">
+      <option value="">Select</option>
+      <option value="0.97">Struggling to fill my calendar</option>
+      <option value="1">Steady, with open slots most weeks</option>
+      <option value="1.05">Booked out 2 or more weeks</option>
+      <option value="1.10">Waitlisted, turning clients away</option>
+    </select>
+
+    <label class="field-label">Streams of income beyond the chair <span class="optional-tag">Optional</span></label>
+    <p class="hint" style="margin-bottom:8px">Income outside services changes your pricing strategy. It can let you hold competitive prices for loyal clientele without hurting your bottom line.</p>
+    <div class="choice-grid">
+      <label class="choice"><input type="checkbox" class="stream" value="Digital products"><span><span class="t">Digital products</span></span></label>
+      <label class="choice"><input type="checkbox" class="stream" value="Teaching classes"><span><span class="t">Teaching classes</span></span></label>
+      <label class="choice"><input type="checkbox" class="stream" value="Content income"><span><span class="t">Content income</span><br><span class="s">Brand deals, ad revenue, affiliates</span></span></label>
+      <label class="choice"><input type="checkbox" class="stream" value="Product sales"><span><span class="t">Product sales</span></span></label>
+      <label class="choice"><input type="checkbox" class="stream" value="VA disability / benefits"><span><span class="t">VA disability / benefits</span></span></label>
+      <label class="choice"><input type="checkbox" class="stream" value="Employment income"><span><span class="t">Employment income</span><br><span class="s">Pay from a full-time or part-time job</span></span></label>
+      <label class="choice"><input type="checkbox" class="stream" value="Other income"><span><span class="t">Other</span></span></label>
+    </div>
+    <div class="svc-detail show" style="margin:10px 0 0 0"><div class="pre" style="margin-top:0">Total monthly from these streams, including job pay ($, big number only)</div>
+      <input type="number" min="0" step="1" id="streamTotal" inputmode="decimal" placeholder="0"></div>
+
+    <label class="field-label">My break-even floor and business profile <span class="optional-tag">Optional</span></label>
+    <p class="hint" style="margin-bottom:8px">Think of this like sitting with your accountant: clients in, costs out, and what is actually left. Fill in what you know and the tool builds your business profile.</p>
+
+    <div class="subhead" style="margin-top:14px">Clients per month, by service</div>
+    <p class="hint" style="margin:6px 0 0">This list builds itself from the services you selected in Step 2.</p>
+    <div class="count-rows" id="countRows"></div>
+    <div class="totals-line" id="clientTotalLine">Total clients per month: 0</div>
+
+    <div class="subhead" style="margin-top:18px">Monthly business overhead</div>
+    <div class="svc-detail show" style="margin:8px 0 0 0"><div class="pre" style="margin-top:0">One total number ($)</div>
+      <input type="number" min="0" step="1" id="overhead" inputmode="decimal" placeholder="0"></div>
+    <label class="mini-check"><input type="checkbox" id="ovDetail"> I want to break it down in detail instead</label>
+    <div class="ov-fields" id="ovFields">
+      <div class="ov-grid">
+        <div><div class="pre">Rent / booth / suite ($)</div><input type="number" min="0" step="1" class="ovItem" id="ov-rent" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Products and supplies ($)</div><input type="number" min="0" step="1" class="ovItem" id="ov-products" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Marketing ($)</div><input type="number" min="0" step="1" class="ovItem" id="ov-marketing" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Systems and software ($)</div><input type="number" min="0" step="1" class="ovItem" id="ov-systems" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Phone ($)</div><input type="number" min="0" step="1" class="ovItem" id="ov-phone" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Insurance ($)</div><input type="number" min="0" step="1" class="ovItem" id="ov-insurance" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Licensing and education ($)</div><input type="number" min="0" step="1" class="ovItem" id="ov-education" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Everything else ($)</div><input type="number" min="0" step="1" class="ovItem" id="ov-other" inputmode="decimal" placeholder="0"></div>
+      </div>
+      <div class="totals-line" id="ovTotalLine">Detailed overhead total: $0</div>
+    </div>
+
+    <label class="mini-check"><input type="checkbox" id="depBiz"> I depend on my business revenue to pay my personal bills</label>
+    <div class="ov-fields" id="pFields">
+      <p class="hint" style="margin:8px 0 0">Most locticians pay life from the chair. List your monthly personal bills so your business floor reflects reality.</p>
+      <div class="ov-grid" style="margin-top:8px">
+        <div><div class="pre">Rent / mortgage ($)</div><input type="number" min="0" step="1" class="pItem" id="p-rent" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Utilities ($)</div><input type="number" min="0" step="1" class="pItem" id="p-utilities" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Gas / transportation ($)</div><input type="number" min="0" step="1" class="pItem" id="p-gas" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Daycare / childcare ($)</div><input type="number" min="0" step="1" class="pItem" id="p-daycare" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Groceries ($)</div><input type="number" min="0" step="1" class="pItem" id="p-groceries" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Personal phone ($)</div><input type="number" min="0" step="1" class="pItem" id="p-phone" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Health / personal insurance ($)</div><input type="number" min="0" step="1" class="pItem" id="p-insurance" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Debt payments ($)</div><input type="number" min="0" step="1" class="pItem" id="p-debt" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Everything else ($)</div><input type="number" min="0" step="1" class="pItem" id="p-other" inputmode="decimal" placeholder="0"></div>
+      </div>
+      <div class="totals-line" id="pTotalLine">Personal bills total: $0</div>
+    </div>
+
+    <label class="field-label">Help the research</label>
+    <div class="choice-grid full">
+      <label class="choice"><input type="checkbox" id="shareData"><span><span class="t">I give permission to use what I entered as anonymous research</span><br><span class="s">Helps current and future locticians price with real data. Only your state, area type, city, services, prices, and work profile are shared. No name, no contact info, no personal budget numbers.</span></span></label>
+    </div>
+
+    <button class="go" id="goBtn" type="button">Plot my pricing</button>
+    <div class="err" id="err">Complete the required fields: name, state, area, city, licensing status, at least one training foundation, location type, shampoo status, booking status, and at least one service with a valid price.</div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results">
+    <div class="results-head">
+      <h2 id="reportTitle">Your Pricing Quadrant</h2>
+      <p id="scoreLine"></p>
+    </div>
+
+    <div class="summary" id="summary"></div>
+
+    <button class="go dl-btn" type="button" style="margin:0 0 20px" onclick="window.print()">Download / save my report (PDF)</button>
+
+    <div class="banner compliance" id="complianceBox">
+      <strong>Handle compliance first.</strong> If your state requires a license for the services you offer, resolve that before restructuring your pricing. Compliance is the floor of the business, and everything in this quadrant assumes you are standing on it.
+    </div>
+    <div class="banner demand" id="demandBox"></div>
+    <div class="banner floorwarn" id="floorBox"></div>
+
+    <div class="chart-card">
+      <svg id="chart" viewBox="0 0 520 470" role="img" aria-label="Pricing quadrant chart"></svg>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <div class="verdicts" id="verdicts"></div>
+
+    <div class="biz-card" id="bizCard"></div>
+
+    <div class="action-card" id="raiseCard" style="display:none">
+      <h3>Your price raise plan</h3>
+      <p>At least one of your services is in Undercharging. Here is how to raise without losing the clients who built you:</p>
+      <ol>
+        <li><b>Give notice.</b> Announce the change 30 to 60 days ahead, in writing, with your booking confirmations.</li>
+        <li><b>Set one effective date.</b> Every client hears the same date. No case-by-case negotiating at the chair.</li>
+        <li><b>Decide on legacy rates.</b> You do not have to charge loyal clients the max. A protected rate for the clients who built you keeps the clientele and environment you enjoy, while new clients come in at the new standard.</li>
+        <li><b>Tie it to the standard.</b> The price reflects what is delivered: your time standard, your consultation process, your consistency. Let the standard do the explaining.</li>
+      </ol>
+    </div>
+
+    <div class="action-card" id="travelCard" style="display:none">
+      <h3>Travel fee guidance</h3>
+      <p>As a mobile loctician, keep your service price clean and charge the drive separately: a flat travel fee inside your normal radius (for example, 10 to 15 miles), then a per-mile rate beyond it. Folding travel into the service price hides your real rate and makes every quote a negotiation. The fee also filters clients who respect your time.</p>
+    </div>
+
+    <div class="assume">
+      <h4>What these ranges assume</h4>
+      <ul>
+        <li>Standard maintenance window: clients within 4 to 7 weeks, not overdue (overdue starting prices are their own entries)</li>
+        <li>No repairs, slippage work, or severe buildup (those are add-on charges)</li>
+        <li>Install and extension prices are starting prices, adjusted up for length and density</li>
+        <li>Your standard rate, before travel fees, deposits, or overdue scaling</li>
+      </ul>
+    </div>
+
+    <p class="baseline-note" id="baselineNote"></p>
+    <p class="baseline-note" id="verifiedNote"></p>
+    <p class="disclaimer">This tool provides educational guidance, not legal, tax, or financial advice. Licensing requirements vary by state and change over time. Verify your own state's requirements and work with a licensed professional on your money plan.</p>
+  </section>
+
+</div>
+
+<footer>© <b>ClutchNLoc</b> | Service Pricing Quadrant. For guide purchasers. Do not redistribute.</footer>
+
+<script>
+/* ==========================================================
+   EDIT ZONE (for ClutchNLoc only)
+   ----------------------------------------------------------
+   1. NATIONAL_DEFAULTS: PLACEHOLDER suburban baseline ranges.
+      Replace every low/high with your researched numbers
+      before launch. Urban and rural areas are adjusted
+      automatically from these using cost-of-living factors.
+   2. STATE_DATA: add your per-state research here. Any state
+      and service you fill in overrides the national default.
+      Example shape (delete this comment when done):
+      "VA": { retieSm:{low:110,high:320}, retwist:{low:70,high:200} }
+   3. RANGES_VERIFIED: update this whenever you refresh the
+      pricing data. It displays in the results.
+   4. HAIR_INCLUDED_MULT: how much extension ranges scale up
+      when the loctician provides the hair. Placeholder 1.3
+      (30% higher). Adjust from your research.
+   5. DATA_ENDPOINT: paste your Google Apps Script web app URL
+      here to collect opted-in anonymous pricing data into a
+      Google Sheet. Leave empty to disable collection.
+      Apps Script setup: new Sheet > Extensions > Apps Script >
+      paste a doPost(e) that appends JSON.parse(e.postData
+      .contents) values as a row > Deploy > Web app > access:
+      Anyone. Copy the /exec URL here.
+   6. FUNNEL_URLS: overdue and threeHour power the verdict
+      links. coaching and accountant power the Business
+      Profile card: point coaching at your booking or Stan
+      Store listing, and accountant at your accountant's
+      services page. Leave accountant empty to hide that line
+      until it is ready.
+   ========================================================== */
+const RANGES_VERIFIED = "July 2026";
+const HAIR_INCLUDED_MULT = 1.3;
+const DATA_ENDPOINT = "";
+const FUNNEL_URLS = {
+  overdue: "https://stan.store/ClutchNLoc",
+  threeHour: "https://stan.store/ClutchNLoc",
+  coaching: "https://stan.store/ClutchNLoc",
+  accountant: ""
+};
+
+const SERVICES = {
+  /* Consultation first: it positions you as premium and filters for the ideal clients you want to attract */
+  consult:  {name:"New Client Consultation", sub:"Prior to official service", cat:"Consultation", consult:true},
+  /* Maintenance */
+  retieSm:  {name:"Sisterlocks / Microlocks Retie", sub:"4 to 6 weeks, 499 locs or less", cat:"Maintenance", hourly:true, funnel:true, od:true},
+  retieLg:  {name:"500+ Sisterlocks / Microlocks Retie", sub:"4 to 6 weeks", cat:"Maintenance", hourly:true, funnel:true, over500:true, od:true},
+  retwist:  {name:"Traditional Loc Retwist", cat:"Maintenance", hourly:true},
+  crochet:  {name:"Traditional Loc Crochet Maintenance", sub:"Alternative to retwisting", cat:"Maintenance", hourly:true},
+  ilockTrad:{name:"Interlocking Traditional Locs", sub:"8 to 12 weeks", cat:"Maintenance", hourly:true, funnel:true},
+  wickMaint:{name:"Wick Maintenance", cat:"Maintenance", hourly:true},
+  /* Installs: starting prices */
+  slInstall:{name:"Sisterlock Install", sub:"Starting price, up to 5 inches", cat:"Installs (starting prices)", perInch:true, hourly:true},
+  mlIlock:  {name:"Microlock Interlock Install", sub:"Starting price, up to 5 inches", cat:"Installs (starting prices)", perInch:true, hourly:true},
+  mlTwist:  {name:"Microloc 2-Strand Twist Install", sub:"Starting price, up to 5 inches", cat:"Installs (starting prices)", perInch:true, hourly:true},
+  mlBraid:  {name:"Microlocs Braid Loc Install", sub:"Starting price, up to 5 inches", cat:"Installs (starting prices)", perInch:true, hourly:true},
+  starter:  {name:"Traditional Loc Starter Locs", sub:"Enter your starting price for each size you offer", cat:"Installs (starting prices)", sizes:true},
+  /* Extensions / Advanced Installs */
+  mlExt:    {name:"Microloc Extensions", sub:"Installed with crochet needle", cat:"Extensions / Advanced Installs", hourly:true, hair:true},
+  mlBraidExt:{name:"Microlock Braid Extensions", warnSub:"Note: installing microlock extensions with the braid method is not recommended or advised", cat:"Extensions / Advanced Installs", hourly:true, hair:true, notAdvised:true},
+  tradExt:  {name:"Traditional Loc Extensions", cat:"Extensions / Advanced Installs", hourly:true, hair:true},
+  wicks:    {name:"Wicks", cat:"Extensions / Advanced Installs", hourly:true, hair:true},
+  /* Add-ons */
+  styleBasic:{name:"Basic Styling Add-On", sub:"2-strand twists, barrels, and similar", cat:"Add-ons"},
+  styleAdv: {name:"Advanced Styling Add-On", sub:"Combo techniques, curls, adding hair", cat:"Add-ons"},
+  frizz:    {name:"Frizz Clean Up", cat:"Add-ons"},
+  locDetox: {name:"Loc Detox", cat:"Add-ons"},
+  scalpTreat:{name:"Scalp Treatment", cat:"Add-ons"},
+  scalpExam:{name:"Scalp Exam", cat:"Add-ons"},
+  deepCond: {name:"Deep Conditioning", cat:"Add-ons"},
+  colorSvc: {name:"Color Services", cat:"Add-ons"}
+};
+
+const EXTRA_KEYS = {
+  starterSm: {name:"Traditional Loc Starter Locs (Small)"},
+  starterMd: {name:"Traditional Loc Starter Locs (Medium)"},
+  starterLg: {name:"Traditional Loc Starter Locs (Large)"},
+  retieSmOD: {name:"Overdue Retie, Starting (499 or less)", odOf:"retieSm"},
+  retieLgOD: {name:"Overdue Retie, Starting (500+)", odOf:"retieLg"}
+};
+
+const NATIONAL_DEFAULTS = {          /* PLACEHOLDERS: replace with research */
+  consult:   {low:25,  high:100},
+  retieSm:   {low:100, high:300},
+  retieSmOD: {low:150, high:420},
+  retieLg:   {low:150, high:450},
+  retieLgOD: {low:220, high:600},
+  retwist:   {low:65,  high:185},
+  crochet:   {low:85,  high:220},
+  ilockTrad: {low:90,  high:250},
+  wickMaint: {low:75,  high:200},
+  slInstall: {low:450, high:1100},
+  mlIlock:   {low:300, high:900},
+  mlTwist:   {low:250, high:750},
+  mlBraid:   {low:250, high:700},
+  starterSm: {low:200, high:600},
+  starterMd: {low:150, high:450},
+  starterLg: {low:100, high:350},
+  mlExt:     {low:600, high:1800},
+  mlBraidExt:{low:500, high:1500},
+  tradExt:   {low:400, high:1200},
+  wicks:     {low:400, high:1200},
+  styleBasic:{low:25,  high:85},
+  styleAdv:  {low:60,  high:200},
+  frizz:     {low:20,  high:75},
+  locDetox:  {low:40,  high:150},
+  scalpTreat:{low:20,  high:75},
+  scalpExam: {low:15,  high:60},
+  deepCond:  {low:20,  high:80},
+  colorSvc:  {low:60,  high:250}
+};
+
+const STATE_DATA = {};
+/* ================= END EDIT ZONE ========================== */
+
+const nameFor = key => (SERVICES[key] || EXTRA_KEYS[key]).name;
+
+const STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+
+const stateSel = document.getElementById('state');
+stateSel.innerHTML = '<option value="">Select your state</option>' +
+  STATES.map(s => `<option value="${s}">${s}</option>`).join('');
+
+/* Build service checkboxes grouped by category */
+const svcGroup = document.getElementById('svcGroup');
+let lastCat = '', html = '';
+Object.entries(SERVICES).forEach(([key, s]) => {
+  if (s.cat !== lastCat) {
+    if (lastCat) html += '</div>';
+    html += `<div class="subhead">${s.cat}</div><div class="choice-grid full">`;
+    lastCat = s.cat;
+  }
+  let detail = '';
+  if (s.consult) {
+    detail = `<div class="inline-radios">
+        <label><input type="radio" name="consultMode" value="free" checked> Free</label>
+        <label><input type="radio" name="consultMode" value="paid"> Paid</label>
+      </div>
+      <div id="consult-price" style="display:none">
+        <div class="pre">Consultation price ($)</div>
+        <input type="number" min="0" step="1" id="price-${key}" inputmode="decimal" placeholder="0">
+      </div>`;
+  } else if (s.sizes) {
+    detail = `<div class="field-row">
+        <div><div class="pre">Small locs ($)</div>
+        <input type="number" min="0" step="1" id="price-starterSm" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Medium locs ($)</div>
+        <input type="number" min="0" step="1" id="price-starterMd" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Large locs ($)</div>
+        <input type="number" min="0" step="1" id="price-starterLg" inputmode="decimal" placeholder="0"></div>
+      </div>
+      <div class="pre" style="font-weight:500">Fill in only the sizes you offer.</div>`;
+  } else {
+    const hourlyToggle = s.hourly ? `<div class="inline-radios">
+        <label><input type="radio" name="mode-${key}" value="flat" checked> Flat rate</label>
+        <label><input type="radio" name="mode-${key}" value="hourly"> I charge hourly</label>
+      </div>` : '';
+    const hairToggle = s.hair ? `<div class="pre">Who provides the hair?</div>
+      <div class="inline-radios">
+        <label><input type="radio" name="hair-${key}" value="client" checked> Client provides</label>
+        <label><input type="radio" name="hair-${key}" value="loctician"> I provide (built into price)</label>
+      </div>` : '';
+    const odBlock = s.od ? `<label class="mini-check"><input type="checkbox" class="odCheck" id="od-${key}" data-od="${key}"> I offer overdue reties (8+ weeks)</label>
+      <div class="od-wrap" id="odwrap-${key}">
+        <div class="pre">Overdue retie starting price ($)</div>
+        <input type="number" min="0" step="1" id="price-${key}OD" inputmode="decimal" placeholder="0">
+      </div>` : '';
+    const timeFields = s.cat !== 'Add-ons' ? `<div class="field-row" style="margin-top:6px">
+        <div><div class="pre">Typical time from (hrs) <span style="font-weight:500">optional</span></div>
+        <input type="number" min="0" step="0.5" id="tmin-${key}" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">to (hrs)</div>
+        <input type="number" min="0" step="0.5" id="tmax-${key}" inputmode="decimal" placeholder="0"></div>
+      </div>` : '';
+    detail = `${hourlyToggle}${hairToggle}
+      <div id="flat-${key}">
+        <div class="pre">Your current price ($)</div>
+        <input type="number" min="0" step="1" id="price-${key}" inputmode="decimal" placeholder="0">
+      </div>
+      ${s.hourly ? `<div class="hourly-fields" id="hourly-${key}">
+        <div><div class="pre">Hourly rate ($)</div>
+        <input type="number" min="0" step="1" id="rate-${key}" inputmode="decimal" placeholder="0"></div>
+        <div><div class="pre">Typical hours</div>
+        <input type="number" min="0" step="0.5" id="hours-${key}" inputmode="decimal" placeholder="0"></div>
+      </div>` : ''}
+      ${timeFields}${odBlock}`;
+  }
+  const subLine = s.warnSub
+    ? `<br><span class="warn-s">${s.warnSub}</span>`
+    : (s.sub ? `<br><span class="s">${s.sub}</span>` : '');
+  html += `<div>
+    <label class="choice"><input type="checkbox" class="svc" data-svc="${key}">
+      <span><span class="t">${s.name}</span>${subLine}</span></label>
+    <div class="svc-detail" id="detail-${key}">${detail}</div>
+  </div>`;
+});
+html += '</div>';
+svcGroup.innerHTML = html;
+
+/* Build clients-per-month rows (hidden until the matching service is selected) */
+const COUNTABLE = [...Object.keys(SERVICES).filter(k => !SERVICES[k].sizes), ...Object.keys(EXTRA_KEYS)];
+document.getElementById('countRows').innerHTML = COUNTABLE.map(key =>
+  `<div class="count-row" id="crow-${key}"><span>${nameFor(key)}</span>
+   <input type="number" min="0" step="1" class="cpm" id="cpm-${key}" inputmode="numeric" placeholder="0"></div>`).join('');
+
+function updateCountRows(){
+  const consultPaid = document.querySelector('input[name="consultMode"]:checked')?.value === 'paid';
+  COUNTABLE.forEach(key => {
+    const row = document.getElementById('crow-' + key);
+    let show = false;
+    if (EXTRA_KEYS[key] && EXTRA_KEYS[key].odOf) {
+      const base = EXTRA_KEYS[key].odOf;
+      show = document.querySelector(`.svc[data-svc="${base}"]`)?.checked && document.getElementById('od-' + base)?.checked;
+    } else if (key.startsWith('starter')) {
+      show = document.querySelector('.svc[data-svc="starter"]')?.checked;
+    } else if (key === 'consult') {
+      show = document.querySelector('.svc[data-svc="consult"]')?.checked && consultPaid;
+    } else {
+      show = document.querySelector(`.svc[data-svc="${key}"]`)?.checked;
+    }
+    row.classList.toggle('show', !!show);
+  });
+  updateClientTotal();
+}
+
+function updateClientTotal(){
+  let total = 0;
+  document.querySelectorAll('.count-row.show .cpm').forEach(el => {
+    const v = parseFloat(el.value);
+    if (!isNaN(v) && v > 0) total += v;
+  });
+  document.getElementById('clientTotalLine').textContent =
+    'Total clients per month: ' + Math.round(total);
+  return total;
+}
+
+function ovDetailedTotal(){
+  let sum = 0;
+  document.querySelectorAll('.ovItem').forEach(el => {
+    const v = parseFloat(el.value);
+    if (!isNaN(v) && v > 0) sum += v;
+  });
+  return sum;
+}
+
+function personalBillsTotal(){
+  let sum = 0;
+  document.querySelectorAll('.pItem').forEach(el => {
+    const v = parseFloat(el.value);
+    if (!isNaN(v) && v > 0) sum += v;
+  });
+  return sum;
+}
+
+/* Interactions */
+document.addEventListener('change', e => {
+  const box = e.target.closest('.choice');
+  if (box && e.target.type === 'radio') {
+    document.querySelectorAll(`input[name="${e.target.name}"]`).forEach(r => {
+      const c = r.closest('.choice');
+      if (c) c.classList.toggle('checked', r.checked);
+    });
+  } else if (box && e.target.type === 'checkbox') {
+    box.classList.toggle('checked', e.target.checked);
+  }
+  if (e.target.classList.contains('svc')) {
+    document.getElementById('detail-' + e.target.dataset.svc)
+      .classList.toggle('show', e.target.checked);
+    updateCountRows();
+  }
+  if (e.target.classList.contains('odCheck')) {
+    document.getElementById('odwrap-' + e.target.dataset.od)
+      .classList.toggle('show', e.target.checked);
+    updateCountRows();
+  }
+  if (e.target.name === 'consultMode') {
+    document.getElementById('consult-price').style.display =
+      e.target.value === 'paid' ? 'block' : 'none';
+    updateCountRows();
+  }
+  if (e.target.name && e.target.name.startsWith('mode-')) {
+    const key = e.target.name.slice(5);
+    const hourly = e.target.value === 'hourly';
+    document.getElementById('flat-' + key).style.display = hourly ? 'none' : 'block';
+    document.getElementById('hourly-' + key).classList.toggle('show', hourly);
+  }
+  if (e.target.id === 'ovDetail') {
+    document.getElementById('ovFields').classList.toggle('show', e.target.checked);
+  }
+  if (e.target.id === 'depBiz') {
+    document.getElementById('pFields').classList.toggle('show', e.target.checked);
+  }
+});
+document.addEventListener('input', e => {
+  if (e.target.classList.contains('cpm')) updateClientTotal();
+  if (e.target.classList.contains('ovItem'))
+    document.getElementById('ovTotalLine').textContent =
+      'Detailed overhead total: $' + Math.round(ovDetailedTotal());
+  if (e.target.classList.contains('pItem'))
+    document.getElementById('pTotalLine').textContent =
+      'Personal bills total: $' + Math.round(personalBillsTotal());
+});
+
+function rangeFor(state, key, colMult, hairMult){
+  const sd = STATE_DATA[state];
+  const base = (sd && sd[key]) ? {...sd[key], src:'state'} : {...NATIONAL_DEFAULTS[key], src:'national'};
+  base.low  = Math.round(base.low  * colMult * hairMult);
+  base.high = Math.round(base.high * colMult * hairMult);
+  return base;
+}
+
+const ZONES = {
+  under:   {label:"Undercharging", cls:"under",
+    text:"You deliver more than your price says. Raising your rate is not greed, it is accuracy. Move toward the recommended range, and remember it is a range: you decide where inside it protects the clientele you want to keep."},
+  aligned: {label:"Premium Aligned", cls:"aligned",
+    text:"Your price and your delivery match at the top of your market. Protect it: keep your standard consistent so the price keeps explaining itself. Your next revenue lever is not a higher base price, it is a pre-defined add-on menu."},
+  building:{label:"Building", cls:"building",
+    text:"Honest pricing at the building stage earns client loyalty and patience for your learning curve. Grow the experience first, then move the price with it."},
+  ahead:   {label:"Price Ahead of Delivery", cls:"ahead",
+    text:"Your price is outrunning what the client receives. Either add to the experience or bring the price back inside the recommended range. Clients feel this gap even when they cannot name it."}
+};
+
+const DEMAND_NOTES = {
+  "0.97": "You marked your calendar as struggling. Hold the recommended range and invest in visibility, portfolio, and booking flow instead. Underpricing rarely fixes empty slots, it just fills them with the wrong clients.",
+  "1.05": "You are booked out 2 or more weeks. That is real market demand, and your recommended ranges have been nudged up to reflect it.",
+  "1.10": "You are waitlisted. The market is already telling you the price is too low. Your recommended ranges have been raised to reflect that demand."
+};
+
+document.getElementById('goBtn').addEventListener('click', () => {
+  const err = document.getElementById('err');
+  err.classList.remove('show');
+
+  const userName = document.getElementById('userName').value.trim();
+  const state = stateSel.value;
+  const colMult = parseFloat(document.getElementById('area').value);
+  const areaText = document.getElementById('area').selectedOptions[0]?.textContent || '';
+  const city = document.getElementById('city').value.trim();
+  const lic = document.querySelector('input[name="license"]:checked');
+  const trained = [...document.querySelectorAll('.train')].some(el => el.checked);
+  const loc = document.querySelector('input[name="loc"]:checked');
+  const isMobile = !!document.querySelector('.mobileOpt:checked');
+  const shampoo = document.querySelector('input[name="shampoo"]:checked');
+  const demandVal = document.getElementById('demand').value;
+
+  const consultFree = document.querySelector('input[name="consultMode"]:checked')?.value === 'free';
+
+  const picked = [];
+  let badInput = false;
+
+  const readTime = key => {
+    const tminEl = document.getElementById('tmin-' + key);
+    if (!tminEl) return null;
+    const tmin = parseFloat(tminEl.value);
+    const tmax = parseFloat(document.getElementById('tmax-' + key).value);
+    const lo = !isNaN(tmin) && tmin > 0 ? tmin : null;
+    const hi = !isNaN(tmax) && tmax > 0 ? tmax : null;
+    if (lo === null && hi === null) return null;
+    const a = lo !== null ? lo : hi, b = hi !== null ? hi : lo;
+    return {min: Math.min(a,b), max: Math.max(a,b)};
+  };
+
+  document.querySelectorAll('.svc:checked').forEach(el => {
+    const key = el.dataset.svc;
+    const svc = SERVICES[key];
+    if (svc.consult && consultFree) { picked.push({key, price:0, free:true}); return; }
+    if (svc.sizes) {
+      let any = false;
+      Object.keys(EXTRA_KEYS).filter(k => k.startsWith('starter')).forEach(sk => {
+        const v = parseFloat(document.getElementById('price-' + sk).value);
+        if (!isNaN(v) && v > 0) { picked.push({key: sk, price: v, starter:true}); any = true; }
+      });
+      if (!any) badInput = true;
+      return;
+    }
+    const mode = svc.hourly
+      ? (document.querySelector(`input[name="mode-${key}"]:checked`)?.value || 'flat') : 'flat';
+    let price, hourlyInfo = null;
+    if (mode === 'hourly') {
+      const rate = parseFloat(document.getElementById('rate-' + key).value);
+      const hrs = parseFloat(document.getElementById('hours-' + key).value);
+      if (isNaN(rate) || isNaN(hrs) || rate <= 0 || hrs <= 0) { badInput = true; return; }
+      price = rate * hrs;
+      hourlyInfo = {rate, hrs};
+    } else {
+      price = parseFloat(document.getElementById('price-' + key).value);
+      if (isNaN(price) || price <= 0) { badInput = true; return; }
+    }
+    const hairIncluded = svc.hair
+      ? document.querySelector(`input[name="hair-${key}"]:checked`)?.value === 'loctician' : false;
+    picked.push({key, price, hourlyInfo, hairIncluded, time: readTime(key)});
+
+    if (svc.od && document.getElementById('od-' + key).checked) {
+      const odPrice = parseFloat(document.getElementById('price-' + key + 'OD').value);
+      if (isNaN(odPrice) || odPrice <= 0) { badInput = true; return; }
+      picked.push({key: key + 'OD', price: odPrice, isOD: true});
+    }
+  });
+
+  const plottable = picked.filter(p => !p.free);
+
+  if (!userName || !state || !colMult || !city || !lic || !trained || !loc || !shampoo || !demandVal || picked.length === 0 || badInput) {
+    err.classList.add('show');
+    return;
+  }
+
+  /* Experience score */
+  let score = parseFloat(document.getElementById('years').value)
+            + parseFloat(loc.value)
+            + parseFloat(shampoo.value);
+  document.querySelectorAll('.xp:checked').forEach(el => score += parseFloat(el.value));
+  score = Math.min(100, Math.round(score));
+
+  const demandMult = parseFloat(demandVal);
+
+  /* Business profile numbers */
+  const totalClients = updateClientTotal();
+  const ovDetailOn = document.getElementById('ovDetail').checked;
+  const ovBig = parseFloat(document.getElementById('overhead').value);
+  const overheadTotal = ovDetailOn ? ovDetailedTotal() : ((!isNaN(ovBig) && ovBig > 0) ? ovBig : 0);
+  const overheadPerClient = (overheadTotal > 0 && totalClients > 0) ? overheadTotal / totalClients : null;
+  const streamTotal = parseFloat(document.getElementById('streamTotal').value);
+  const extraIncome = (!isNaN(streamTotal) && streamTotal > 0) ? streamTotal : 0;
+  const streams = [...document.querySelectorAll('.stream:checked')].map(el => el.value);
+  const depBiz = document.getElementById('depBiz').checked;
+  const personal = depBiz ? personalBillsTotal() : 0;
+  const workP = document.querySelector('input[name="workp"]:checked')?.value || null;
+  const wd = parseFloat(document.getElementById('workDays').value);
+  const wh = parseFloat(document.getElementById('workHours').value);
+  const workDays = (!isNaN(wd) && wd > 0) ? wd : null;
+  const workHours = (!isNaN(wh) && wh > 0) ? wh : null;
+
+  /* Per-service position */
+  let usedNational = false, floorHit = false;
+  const dots = plottable.map((p, i) => {
+    const conf = SERVICES[p.key] || {};
+    const hairMult = p.hairIncluded ? HAIR_INCLUDED_MULT : 1;
+    const r = rangeFor(state, p.key, colMult, hairMult);
+    if (r.src === 'national') usedNational = true;
+    const rawPct = (p.price - r.low) / (r.high - r.low) * 100;
+    const pct = Math.max(0, Math.min(100, rawPct));
+    const center = (r.low + (score / 100) * (r.high - r.low)) * demandMult;
+    const recLow  = Math.max(r.low, Math.round(center * 0.88));
+    const recHigh = Math.round(Math.min(r.high * demandMult, center * 1.12));
+    let zone;
+    if (score >= 50) zone = pct < 50 ? 'under' : 'aligned';
+    else zone = pct < 50 ? 'building' : 'ahead';
+    const isAddon = conf.cat === 'Add-ons';
+    const belowFloor = overheadPerClient !== null && p.price < overheadPerClient && !isAddon && !conf.consult;
+    if (belowFloor) floorHit = true;
+    const count = (() => {
+      const el = document.getElementById('cpm-' + p.key);
+      if (!el || !el.closest('.count-row').classList.contains('show')) return 0;
+      const v = parseFloat(el.value);
+      return (!isNaN(v) && v > 0) ? v : 0;
+    })();
+    return {...p, ...r, name: nameFor(p.key), conf, rawPct, pct, recLow, recHigh, zone, belowFloor, count, idx:i};
+  });
+
+  drawChart(score, dots);
+  writeSummary(userName, score, dots, state, areaText, city);
+  writeVerdicts(score, dots, usedNational, consultFree && picked.some(p => p.free));
+  writeBizProfile(userName, dots, totalClients, overheadTotal, overheadPerClient, extraIncome, streams, personal, depBiz, workP, workDays, workHours);
+
+  document.getElementById('reportTitle').textContent = `${userName}'s Pricing Quadrant`;
+  document.getElementById('raiseCard').style.display =
+    dots.some(d => d.zone === 'under') ? 'block' : 'none';
+  document.getElementById('travelCard').style.display = isMobile ? 'block' : 'none';
+  document.getElementById('complianceBox').classList.toggle('show', lic.value !== 'compliant');
+
+  const dBox = document.getElementById('demandBox');
+  if (DEMAND_NOTES[demandVal]) {
+    dBox.innerHTML = '<strong>Demand check.</strong> ' + DEMAND_NOTES[demandVal];
+    dBox.classList.add('show');
+  } else dBox.classList.remove('show');
+
+  const fBox = document.getElementById('floorBox');
+  if (floorHit) {
+    fBox.innerHTML = `<strong>Break-even alert.</strong> Your overhead works out to $${Math.round(overheadPerClient)} per client (${'$'+Math.round(overheadTotal)} overhead / ${Math.round(totalClients)} clients). At least one service is priced below that, which means it loses money before your time is even counted. Flagged services are marked below.`;
+    fBox.classList.add('show');
+  } else fBox.classList.remove('show');
+
+  document.getElementById('verifiedNote').textContent = 'Ranges last verified: ' + RANGES_VERIFIED;
+  document.getElementById('scoreLine').textContent =
+    `Experience Delivered score: ${score} of 100`;
+
+  submitResearch(state, areaText, city, plottable, score);
+
+  const res = document.getElementById('results');
+  res.classList.add('show');
+  res.scrollIntoView({behavior:'smooth'});
+});
+
+function submitResearch(state, areaText, city, plottable, score){
+  if (!document.getElementById('shareData').checked || !DATA_ENDPOINT) return;
+  const payload = {
+    ts: new Date().toISOString(),
+    state, area: areaText, city, score,
+    workProfile: document.querySelector('input[name="workp"]:checked')?.value || null,
+    services: plottable.map(p => ({
+      service: nameFor(p.key),
+      price: Math.round(p.price),
+      hourly: !!p.hourlyInfo,
+      hairIncluded: !!p.hairIncluded,
+      timeMin: p.time ? p.time.min : null,
+      timeMax: p.time ? p.time.max : null
+    }))
+  };
+  try {
+    fetch(DATA_ENDPOINT, {method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain'}, body: JSON.stringify(payload)});
+  } catch(e) { /* research submission is best-effort only */ }
+}
+
+const DOT_COLORS = ["#c38540","#471f74","#6915b4","#8962d0","#a7ca63","#881b1b","#4f6d8a","#6d4f2a","#9a3d5e","#3f6f4f","#5a5a2a","#2a5a6d","#b0743f","#7c4a7c","#8a6d1c","#a3532c","#4a7a6d","#6d2a5a","#2a3f6d","#7a5d2a","#446622","#663344"];
+
+function drawChart(score, dots){
+  const L=64, T=18, W=420, H=380;
+  const xPos = v => L + (v/100)*W;
+  const yPos = v => T + H - (v/100)*H;
+  let s = '';
+
+  s += `<rect x="${L}" y="${T}" width="${W/2}" height="${H/2}" fill="#f6f1fc"/>`;
+  s += `<rect x="${L+W/2}" y="${T}" width="${W/2}" height="${H/2}" fill="#f8f2ea"/>`;
+  s += `<rect x="${L}" y="${T+H/2}" width="${W/2}" height="${H/2}" fill="#faf8fd"/>`;
+  s += `<rect x="${L+W/2}" y="${T+H/2}" width="${W/2}" height="${H/2}" fill="#f3f8e8"/>`;
+  s += `<rect x="${L}" y="${T}" width="${W}" height="${H}" fill="none" stroke="#471f74" stroke-width="1.5"/>`;
+  s += `<line x1="${L+W/2}" y1="${T}" x2="${L+W/2}" y2="${T+H}" stroke="#471f74" stroke-width="1"/>`;
+  s += `<line x1="${L}" y1="${T+H/2}" x2="${L+W}" y2="${T+H/2}" stroke="#471f74" stroke-width="1"/>`;
+
+  const lab = (x,y,t) =>
+    `<text x="${x}" y="${y}" text-anchor="middle" font-family="Karla,sans-serif" font-size="11.5" font-weight="700" letter-spacing="1" fill="#6915b4">${t}</text>`;
+  s += lab(L+W*0.25, T+16, 'PRICE AHEAD OF DELIVERY');
+  s += lab(L+W*0.75, T+16, 'PREMIUM ALIGNED');
+  s += lab(L+W*0.25, T+H-8, 'BUILDING');
+  s += lab(L+W*0.75, T+H-8, 'UNDERCHARGING');
+
+  s += `<text x="${L+W/2}" y="${T+H+34}" text-anchor="middle" font-family="Karla,sans-serif" font-size="13" font-weight="700" fill="#471f74">Experience Delivered →</text>`;
+  s += `<text x="20" y="${T+H/2}" text-anchor="middle" font-family="Karla,sans-serif" font-size="13" font-weight="700" fill="#471f74" transform="rotate(-90 20 ${T+H/2})">Price vs Your Market →</text>`;
+
+  s += `<line x1="${xPos(score)}" y1="${T}" x2="${xPos(score)}" y2="${T+H}" stroke="#c38540" stroke-width="1.5" stroke-dasharray="5 5"/>`;
+
+  dots.forEach(d => {
+    const c = DOT_COLORS[d.idx % DOT_COLORS.length];
+    s += `<circle class="dot-in" cx="${xPos(score)}" cy="${yPos(d.pct)}" r="9" fill="${c}" stroke="#fff" stroke-width="2.5"/>`;
+  });
+
+  document.getElementById('chart').innerHTML = s;
+  document.getElementById('legend').innerHTML = dots.map(d =>
+    `<span><i style="background:${DOT_COLORS[d.idx % DOT_COLORS.length]}"></i>${d.name}</span>`).join('');
+}
+
+function writeSummary(userName, score, dots, state, areaText, city){
+  const zoneNames = {under:'Undercharging', aligned:'Premium Aligned', building:'Building', ahead:'Price Ahead'};
+  document.getElementById('summary').innerHTML = `
+    <div class="s-brand"><b>ClutchNLoc</b><span>Prepared for ${userName}</span></div>
+    <div class="s-score">${score}<small>Experience Delivered, out of 100 | ${city}, ${state} (${areaText})</small></div>
+    <div class="s-rows">${dots.map(d => `
+      <div class="s-row"><b>${d.name}</b>
+      <span>$${d.recLow} to $${d.recHigh} <span class="z">${zoneNames[d.zone]}</span></span></div>`).join('')}
+    </div>
+    <div class="s-foot"><span>Screenshot this and retake it every 6 to 12 months. Your score moves, and so should your prices.</span><span>Verified ${RANGES_VERIFIED}</span></div>`;
+}
+
+function writeVerdicts(score, dots, usedNational, consultIsFree){
+  let out = dots.map(d => {
+    const z = ZONES[d.zone];
+    const conf = d.conf;
+    const over = d.rawPct > 100
+      ? `<p class="flag">Your current price is above the researched high for your market. Make sure the experience you deliver clearly earns it.</p>` : '';
+    const floorFlag = d.belowFloor
+      ? `<p class="flag">Below your overhead cost per client. This service loses money before your time is even counted.</p>` : '';
+    const notAdvised = conf.notAdvised
+      ? `<p class="flag">ClutchNLoc note: installing microlock extensions with the braid method is not recommended or advised. If you offer it, price it, but know the foundation risks you are taking on.</p>` : '';
+    const over500 = conf.over500
+      ? `<p class="perinch">The ClutchNLoc standard caps installs at 499 locs for foundation health. If you maintain 500+ heads, price for the time they truly take, and consider the foundation conversation with those clients.</p>` : '';
+    const odNote = d.isOD
+      ? `<p class="perinch">Your overdue starting price is the floor, not the ceiling. Scale it by how overdue the client actually is with the <a href="${FUNNEL_URLS.overdue}" target="_blank" rel="noopener">Overdue Retie Formula</a>: Baseline = (Weeks / Standard Interval) x Price.</p>` : '';
+    const perInch = conf.perInch
+      ? `<p class="perinch">Past 5 inches: add about $${Math.round(d.recLow*0.08)} to $${Math.round(d.recHigh*0.12)} per inch (8 to 12% of your starting price per inch).</p>` : '';
+    const hourlyNote = d.hourlyInfo
+      ? `<p class="perinch">You charge hourly ($${d.hourlyInfo.rate}/hr x ${d.hourlyInfo.hrs} hrs = $${Math.round(d.price)} effective). Careful: hourly pricing punishes you for getting faster. The faster you get, the less you earn for the same result. A flat rate built on a time standard pays you for skill, not slowness.</p>` : '';
+    let timeNote = '';
+    if (d.time && !d.hourlyInfo) {
+      const hiRate = Math.round(d.price / d.time.min);
+      const loRate = Math.round(d.price / d.time.max);
+      const rateTxt = d.time.min === d.time.max ? `about $${hiRate}/hr` : `$${loRate} to $${hiRate}/hr`;
+      timeNote = `<p class="perinch">At $${Math.round(d.price)} and ${d.time.min}${d.time.min === d.time.max ? '' : ' to ' + d.time.max} hours, you earn ${rateTxt} on this service.</p>`;
+    }
+    const hairNote = d.hairIncluded
+      ? `<p class="perinch">Range adjusted upward because you provide the hair. Make sure your hair cost is fully covered inside the price, not absorbed.</p>` : '';
+    const funnel = (conf.funnel && (d.zone === 'under' || d.zone === 'building'))
+      ? `<p class="perinch">Level up this service: the <a href="${FUNNEL_URLS.threeHour}" target="_blank" rel="noopener">3-Hour Retie Guide</a> builds the time standard behind confident flat rates, and the <a href="${FUNNEL_URLS.overdue}" target="_blank" rel="noopener">Overdue Retie Formula</a> protects it from overdue clients.</p>` : '';
+    const startLabel = conf.perInch ? ' (starting price, up to 5 inches)' : (d.isOD ? ' (overdue starting price)' : '');
+    return `<div class="verdict">
+      <h3>${d.name}</h3>
+      <span class="zone ${z.cls}">${z.label}</span>
+      <p>${z.text}</p>${notAdvised}${over}${floorFlag}${hourlyNote}${timeNote}${hairNote}${over500}${odNote}${perInch}${funnel}
+      <div class="range">Recommended range: $${d.recLow} to $${d.recHigh}${startLabel} <span style="font-weight:500;color:var(--muted)">(you charge $${Math.round(d.price)})</span></div>
+    </div>`;
+  }).join('');
+
+  if (consultIsFree) {
+    out += `<div class="verdict">
+      <h3>New Client Consultation</h3>
+      <span class="zone building">Currently Free</span>
+      <p>A free consultation can work as a marketing tool, but a paid consultation is a positioning signal: it filters serious clients, positions you for the premium and high-value clientele you want to attract, pays for your evaluation time, and can be credited toward the install. Consider making the switch as your experience score grows.</p>
+    </div>`;
+  }
+
+  document.getElementById('verdicts').innerHTML = out;
+  document.getElementById('baselineNote').textContent = usedNational
+    ? 'Ranges shown use the national baseline (adjusted for your area type) for one or more services. State-specific research sharpens these numbers.'
+    : 'Ranges shown reflect state-specific research for your market, adjusted for your area type.';
+}
+
+function writeBizProfile(userName, dots, totalClients, overheadTotal, overheadPerClient, extraIncome, streams, personal, depBiz, workP, workDays, workHours){
+  const card = document.getElementById('bizCard');
+  const revenue = dots.reduce((sum, d) => sum + (d.count * d.price), 0);
+  if (revenue <= 0 && overheadTotal <= 0 && extraIncome <= 0 && personal <= 0) {
+    card.style.display = 'none';
+    return;
+  }
+  const chairProfit = revenue - overheadTotal;
+  const profileBits = [];
+  if (workP) profileBits.push(workP);
+  if (workDays && workHours) profileBits.push(`${workDays} days/week, ${workHours} hrs/day behind the chair`);
+  const profileLine = profileBits.length ? `<p style="margin-top:4px;color:#cbb8e6;font-size:13px">${profileBits.join(' | ')}</p>` : '';
+
+  const rows = [];
+  if (revenue > 0) rows.push(`<div class="biz-row"><span>Monthly chair revenue (${Math.round(totalClients)} clients)</span><b>$${Math.round(revenue).toLocaleString()}</b></div>`);
+  if (overheadTotal > 0) rows.push(`<div class="biz-row"><span>Monthly business overhead</span><b>-$${Math.round(overheadTotal).toLocaleString()}</b></div>`);
+  if (overheadPerClient !== null) rows.push(`<div class="biz-row"><span>Overhead cost per client</span><b>$${Math.round(overheadPerClient)}</b></div>`);
+  if (revenue > 0 && overheadTotal > 0) rows.push(`<div class="biz-row"><span>Chair profit before your pay and taxes</span><b>$${Math.round(chairProfit).toLocaleString()}</b></div>`);
+  if (revenue > 0 && workDays && workHours) {
+    const hoursMo = workDays * workHours * 4.33;
+    if (hoursMo > 0) rows.push(`<div class="biz-row"><span>Chair profit per working hour</span><b>$${Math.round(chairProfit / hoursMo)}</b></div>`);
+  }
+  if (extraIncome > 0) rows.push(`<div class="biz-row"><span>Income beyond the chair${streams.length ? ' (' + streams.join(', ') + ')' : ''}</span><b>+$${Math.round(extraIncome).toLocaleString()}</b></div>`);
+  if (revenue > 0 || extraIncome > 0) rows.push(`<div class="biz-row total"><span>Total monthly business picture</span><b>$${Math.round(chairProfit + extraIncome).toLocaleString()}</b></div>`);
+
+  let personalBlock = '';
+  if (depBiz && personal > 0) {
+    const leftOver = chairProfit + extraIncome - personal;
+    personalBlock =
+      `<div class="biz-row"><span>Personal bills the business must cover</span><b>-$${Math.round(personal).toLocaleString()}</b></div>` +
+      `<div class="biz-row"><span>What your business must clear monthly (overhead + life)</span><b>$${Math.round(overheadTotal + personal).toLocaleString()}</b></div>` +
+      `<div class="biz-row total"><span>Left after business and personal bills</span><b>$${Math.round(leftOver).toLocaleString()}</b></div>` +
+      (leftOver < 0
+        ? `<p style="margin-top:10px;color:#f2c9c9;font-size:13.5px;font-weight:600">Right now the numbers do not cover life. That gap is your real pricing assignment: it closes through the recommended ranges above, tighter cadence with loyal clients, and add-ons, not through working more days.</p>`
+        : '');
+  }
+
+  const streamNote = extraIncome > 0
+    ? `<p>Your income beyond the chair gives you pricing flexibility most locticians do not have. You can hold competitive rates for loyal clientele without hurting your bottom line, as long as every service still clears your overhead cost per client.</p>` : '';
+  const accountantLink = FUNNEL_URLS.accountant
+    ? ` And for an established money plan handled by a professional, <a href="${FUNNEL_URLS.accountant}" target="_blank" rel="noopener">work with the accountant behind these numbers</a>.` : '';
+  card.innerHTML = `
+    <h3>${userName}'s Business Profile</h3>
+    ${profileLine}
+    <div class="biz-rows">${rows.join('')}${personalBlock}</div>
+    ${streamNote}
+    <p>Numbers are estimates from what you entered, before your own pay and taxes. Want a strategy built around them? <a href="${FUNNEL_URLS.coaching}" target="_blank" rel="noopener">Book a pricing coaching call with ClutchNLoc</a>.${accountantLink}</p>`;
+  card.style.display = 'block';
+}
+</script>
+</body>
+</html>
